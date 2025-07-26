@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { CreditCard, User, Phone, Mail, MapPin } from 'lucide-react';
+import axios from 'axios';
 
 const BookingForm = () => {
     const [formData, setFormData] = useState({
@@ -26,10 +27,49 @@ const BookingForm = () => {
         }));
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+    const [success, setSuccess] = useState<boolean>(false);
+
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log("Form Submitted:", formData);
-        // This will handle form submission
+        setLoading(true);
+        setError(null);
+        setSuccess(false);
+
+        try {
+            const response = await axios.post("/api/bookings", formData);
+            setSuccess(true);
+            console.log("Booking created:", response.data);
+
+            // Reset form after 2 seconds
+        setTimeout(() => {
+            setSuccess(false);
+            setFormData({
+                firstName: '',
+                lastName: '',
+                email: '',
+                phone: '',
+                cardNumber: '',
+                expirationDate: '',
+                cvv: '',
+                streetAddress: '',
+                aptSuite: '',
+                city: '',
+                state: '',
+                zipCode: '',
+                country: ''
+            });
+        }, 2000);
+            
+        } catch (error) {
+            setError("Failed to submit booking.");
+            console.error("Error submitting booking:", error);
+
+        } finally {
+            setLoading(false);
+        }
+
     };
 
     return (
@@ -272,10 +312,22 @@ const BookingForm = () => {
                 {/* Submit Button */}
                 <button
                     type='submit'
+                    disabled={loading}
                     className='w-full  bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 px-6 rounded-lg transition-all transform hover:scale-[1.02] shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none'
                 >
-                    Confirm & Pay
+                    {loading ? "Processing..." : "Confirm & Pay"}
                 </button>
+                {error && (
+                    <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+                        {error}
+                    </div>
+                )}
+
+                {success && (
+                    <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+                        Booking confirmed successfully!
+                    </div>
+                )}
             </form>
         </div>
     )
