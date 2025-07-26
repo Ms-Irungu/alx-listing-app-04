@@ -59,12 +59,17 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ bookingDetails }) => {
                             ({totalReviews} reviews)
                         </span>
                     </div>
-                    <div className="flex items-center text-sm text-gray-600">
-                        <Calendar className="w-4 h-4 mr-1" />
-                        <span>{startDate}</span>
-                        <span className="mx-2">•</span>
-                        <Clock className="w-4 h-4 mr-1" />
-                        <span>{totalNights} Night{totalNights > 1 ? 's' : ''}</span>
+                    <div className="flex items-center gap-8 text-sm text-gray-600">
+                        <div className='flex gap-3 items-center'>
+                            <Calendar className="w-6 h-6 mr-1" />
+                            <span>{startDate}</span>
+                        </div>
+                        <div className='flex gap-3 items-center'>
+                            <Clock className="w-6 h-6 mr-1" />
+                            <span>{totalNights} Night{totalNights > 1 ? 's' : ''}</span>
+                        </div>
+
+
                     </div>
                 </div>
             </div>

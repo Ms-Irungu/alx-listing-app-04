@@ -253,9 +253,8 @@ const PropertyDetail: React.FC<{ property: PropertyProps }> = ({ property }) => 
                         {/* Reviews */}
                         {activeTab === "reviews" && (
                             <ReviewSection
+                                propertyId={property.name}
                                 reviews={property.reviews || []}
-                                rating={property.rating}
-                                totalReviews={property.reviews?.length || 0}
                             />
                         )}
                         {/* Host Information - Add in here */}
